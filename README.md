@@ -125,4 +125,4 @@ The project comes with the auto-public repository configured. To setup the repos
 
     http://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html
     
-# Testing By Gabriel
+# This project is meant to be a tool to demonstrate Cord Tools
