@@ -7,5 +7,10 @@ pipeline:
     script:
       - mvn package -DskipTests=true
     artifact_path:
-      - ui.apps/target
+      - all/target
     cache: []
+  - name: deploy
+    pipe: 
+      name: cord/deploy
+      config: 
+        environment: gabito
