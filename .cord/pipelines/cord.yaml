@@ -1,0 +1,11 @@
+version: v2
+environments: []
+pipeline:
+  - name: build
+    continue_on_failure: false
+    image: 'maven:3.6-jdk-11'
+    script:
+      - mvn package -DskipTests=true
+    artifact_path:
+      - ui.apps/target
+    cache: []
