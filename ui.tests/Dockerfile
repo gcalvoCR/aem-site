@@ -21,6 +21,7 @@ ENV APP_PATH /usr/src/app
 ENV SELENIUM_STARTUP_TIMEOUT 60
 
 # Begin CloudManager Convention >>>
+## Environment variables
 ENV SELENIUM_BASE_URL http://localhost:4444
 ENV SELENIUM_BROWSER chrome
 ENV REPORTS_PATH reports
@@ -34,6 +35,7 @@ ENV AEM_PUBLISH_PASSWORD admin
 # ENV SHARED_FOLDER
 # ENV UPLOAD_URL
 
+## Install dependencies for wait_for_grid script
 RUN apt -qqy update \
     # Generic dependencies
     && apt -qqy --no-install-recommends install \
@@ -54,6 +56,7 @@ COPY test-module/ ./
 RUN npm install
 
 # Begin CloudManager Convention >>>
+## Copy helper to wait on Selenium readiness
 COPY wait-for-grid.sh .
 RUN chmod 555 wait-for-grid.sh
 

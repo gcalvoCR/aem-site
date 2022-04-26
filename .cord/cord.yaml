@@ -1,21 +1,21 @@
 version: v2
 environments:
-  - name: config-1
+  - name: test-local-3
     env: []
     author: true
     publish: 1
     dispatcher: false
-    aem_version: cloudsdk
+    aem_version: cs.2022.3.6582.20220307T234020Z-220100
     sample_content: true
     persistent: true
     packages: []
 build:
   name: build
   sync_root: ui.apps/src/main/content
-  sync_on_start: true
+  sync_on_start: false
   image: 'maven:3.6-jdk-11'
   script:
-    - echo "mvn package -DskipTests=true"
+    - mvn package -DskipTests=true
   artifact_path:
     - all/target
   cache: []

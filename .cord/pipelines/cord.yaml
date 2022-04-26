@@ -1,16 +1,21 @@
 version: v2
-environments: []
 pipeline:
   - name: build
+    sync_root: ui.apps/src/main/content
     continue_on_failure: false
     image: 'maven:3.6-jdk-11'
     script:
-      - mvn package -DskipTests=true
+      - mvn clean package -DskipTests=true
     artifact_path:
       - all/target
     cache: []
   - name: deploy
+    branches:
+      only:
+        - main
+    # trigger: manual
     pipe: 
       name: cord/deploy
-      config: 
-        environment: gabito
+      config:
+        environment: gabo-demo
+        instance: author-0

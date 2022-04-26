@@ -1,11 +1,11 @@
 'use strict';
 
-const path                    = require('path');
-const webpack                 = require('webpack');
-const MiniCssExtractPlugin    = require('mini-css-extract-plugin');
-const TSConfigPathsPlugin     = require('tsconfig-paths-webpack-plugin');
-const CopyWebpackPlugin       = require('copy-webpack-plugin');
-const { CleanWebpackPlugin }  = require('clean-webpack-plugin');
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TSConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const SOURCE_ROOT = __dirname + '/src/main/webpack';
 
@@ -19,13 +19,16 @@ const resolve = {
 module.exports = {
     resolve: resolve,
     entry: {
-        site: SOURCE_ROOT + '/site/main.ts'
+        site: SOURCE_ROOT + '/site/main.js'
     },
     output: {
-        filename: (chunkData) => {
-            return chunkData.chunk.name === 'dependencies' ? 'clientlib-dependencies/[name].js' : 'clientlib-site/[name].js';
-        },
+        filename: 'clientlib-site/js/[name].bundle.js',
         path: path.resolve(__dirname, 'dist')
+    },
+    optimization: {
+        splitChunks: {
+               chunks: 'all'
+             }
     },
     module: {
         rules: [
@@ -33,12 +36,6 @@ module.exports = {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
                 use: [
-                    {
-                        options: {
-                            eslintPath: require.resolve('eslint'),
-                        },
-                        loader: require.resolve('eslint-loader'),
-                    },
                     {
                         loader: 'ts-loader'
                     },
@@ -49,11 +46,6 @@ module.exports = {
                         }
                     }
                 ]
-            },
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: 'eslint-loader',
             },
             {
                 test: /\.scss$/,
@@ -68,18 +60,20 @@ module.exports = {
                     {
                         loader: 'postcss-loader',
                         options: {
-                            plugins() {
-                                return [
-                                    require('autoprefixer')
-                                ];
-                            }
-                        }
+                            postcssOptions: {
+                              plugins: [
+                                [
+                                  "autoprefixer",
+                                  {
+                                    // Options
+                                  },
+                                ],
+                              ],
+                            },
+                        },
                     },
                     {
                         loader: 'sass-loader',
-                        options: {
-                            url: false
-                        }
                     },
                     {
                         loader: 'glob-import-loader',
@@ -88,18 +82,31 @@ module.exports = {
                         }
                     }
                 ]
-            }
+            },
+            {
+                test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
+                use: {
+                  loader: 'file-loader',
+                  options: {
+                    name: '[path][name].[ext]'
+                  }
+                }
+            },
         ]
     },
     plugins: [
         new CleanWebpackPlugin(),
-        new webpack.NoEmitOnErrorsPlugin(),
+        new ESLintPlugin({
+            extensions: ['js', 'ts', 'tsx']
+        }),
         new MiniCssExtractPlugin({
             filename: 'clientlib-[name]/[name].css'
         }),
-        new CopyWebpackPlugin([
-            { from: path.resolve(__dirname, SOURCE_ROOT + '/resources'), to: './clientlib-site/' }
-        ])
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: path.resolve(__dirname, SOURCE_ROOT + '/resources'), to: './clientlib-site' }
+            ]
+        })
     ],
     stats: {
         assetsSort: 'chunks',

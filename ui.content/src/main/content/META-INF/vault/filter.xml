@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workspaceFilter version="1.0">
-    <filter root="/conf/mysite" mode="merge"/>
-    <filter root="/content/mysite" mode="merge"/>
-    <filter root="/content/dam/mysite/asset.jpg" mode="merge"/>
-    <filter root="/content/experience-fragments/mysite" mode="merge"/>
+    <filter root="/conf/wknd" mode="merge"/>
+    <filter root="/content/wknd" mode="merge"/>
+    <filter root="/content/dam/wknd" mode="merge"/>
+    <filter root="/content/experience-fragments/wknd" mode="merge"/>
+    <filter root="/content/cq:tags/wknd" mode="merge"/>
+    <filter root="/content/cq:graphql" mode="merge" />
 </workspaceFilter>
