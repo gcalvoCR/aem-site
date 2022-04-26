@@ -76,3 +76,5 @@ With Adobe Stock, you have access to more than 140 million high-quality, royalty
 - Install docker
 - Install node
 - open a terminal and type `npm i -g @cord-tools/cord-cli`
+
+- Testing github
